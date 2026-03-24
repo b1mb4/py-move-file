@@ -2,11 +2,15 @@ import os
 
 
 def move_file(command: str) -> None:
-    _, source_path, destination_path = command.split()
+    command_parts = command.split()
+    if len(command_parts) != 3 or command_parts[0] != "mv":
+        return
 
-    if destination_path.endswith("/"):
-        create_directories(destination_path.rstrip("/"))
-        destination_path = f"{destination_path}{os.path.basename(source_path)}"
+    _, source_path, destination_path = command_parts
+
+    if destination_path.endswith(os.sep):
+        create_directories(destination_path.rstrip(os.sep))
+        destination_path = os.path.join(destination_path, os.path.basename(source_path))
     else:
         destination_directory = os.path.dirname(destination_path)
         if destination_directory:
@@ -24,7 +28,7 @@ def move_file(command: str) -> None:
 def create_directories(path: str) -> None:
     current_path = ""
 
-    for directory in path.split("/"):
+    for directory in path.split(os.sep):
         current_path = os.path.join(current_path, directory)
         if not os.path.exists(current_path):
             os.mkdir(current_path)
