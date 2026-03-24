@@ -10,7 +10,10 @@ def move_file(command: str) -> None:
 
     if destination_path.endswith(os.sep):
         create_directories(destination_path.rstrip(os.sep))
-        destination_path = os.path.join(destination_path, os.path.basename(source_path))
+        destination_path = (
+            os.path.join(destination_path,
+                         os.path.basename(source_path))
+        )
     else:
         destination_directory = os.path.dirname(destination_path)
         if destination_directory:
